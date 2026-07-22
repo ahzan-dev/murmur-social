@@ -1,0 +1,70 @@
+[project]
+name = "social"
+entry-point = "main.jac"
+kind = "web-app"
+
+[jac-shadcn]
+style = "nova"
+baseColor = "neutral"
+theme = "amber"
+font = "inter"
+radius = "default"
+menuAccent = "subtle"
+menuColor = "default"
+[dependencies]
+[dependencies.npm]
+"@hugeicons/react" = "*"
+"@hugeicons/core-free-icons" = "*"
+radix-ui = "*"
+class-variance-authority = "*"
+"@fontsource-variable/inter" = "*"
+shadcn = "^3.8.5"
+"@tailwindcss/vite" = "^4.1.17"
+tailwindcss = "^4.1.17"
+clsx = "^2.1.1"
+tailwind-merge = "^3.5.0"
+tw-animate-css = "^1.4.0"
+
+[client.vite]
+plugins = ["tailwindcss()"]
+lib_imports = ["import tailwindcss from '@tailwindcss/vite'"]
+
+# Starter templates run as ONE process. Without this, the runtime
+# auto-detects services/ as microservices and pins the gateway to
+# port 8000, ignoring `jac start -p <port>`.
+[scale.microservices]
+enabled = false
+
+# THIS APP'S OWN JWT SIGNING SECRET. Set JAC_JWT_SECRET before you deploy.
+#
+# Without this section every Jac app falls back to the SAME hardcoded default
+# (`supersecretkey_for_testing_only!`). Two consequences, both real:
+#
+#   1. Anyone can forge a token for any user -- the "secret" ships in the
+#      source of every Jac install on earth.
+#   2. The client stores its token under an un-namespaced `jac_token` key in
+#      localStorage, so a token minted by a DIFFERENT Jac app on the same
+#      origin (localhost:8000, a shared preview host) VALIDATES here -- then
+#      500s with "User not found", because that user exists only in the other
+#      app. The client drops its token on a 401 and nothing else, so the app
+#      gets stuck "logged in" and broken.
+#
+# Giving this app its own secret turns that 500 into a clean 401, which the
+# client handles by dropping the stale token and showing the sign-in form.
+[scale.jwt]
+secret = "${JAC_JWT_SECRET:-murmur-dev-secret-change-before-deploy}"
+
+[jacpack]
+name = "social"
+description = "Posts, follows and a feed — built on the graph"
+
+[client.app_meta_data]
+title = "Murmur"
+description = "A small social app where the graph is the data model — a follow is an edge, and the feed is a walker that traverses them."
+keywords = "social, feed, graph, follows, jac"
+author = "Murmur"
+theme_color = "#dc7702"
+og_type = "website"
+og_title = "Murmur"
+og_description = "A social app built on a graph. No join tables, no queries — just edges."
+og_site_name = "Murmur"

@@ -1,0 +1,6 @@
+.jac/
+node_modules/
+.jaccoder/
+__pycache__/
+*.pyc
+.DS_Store
