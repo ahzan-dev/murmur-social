@@ -54,6 +54,13 @@ enabled = false
 [scale.jwt]
 secret = "${JAC_JWT_SECRET:-murmur-dev-secret-change-before-deploy}"
 
+# Manual routing: `app` (main.jac) is the client root and declares its own
+# <Router>. Without this the runtime falls back to the file-based `pages/`
+# convention, which generates a router that dereferences the layout eagerly at
+# startup.
+[serve]
+base_route_app = "app"
+
 [jacpack]
 name = "social"
 description = "Posts, follows and a feed — built on the graph"
